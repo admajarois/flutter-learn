@@ -7,18 +7,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/search_category.dart';
 import '../widgets/movie_tile.dart';
 import '../models/movie.dart';
+import '../models/main_page_data.dart';
+
+import '../controllers/mian_page_data_controller.dart';
+
+
+final mainPageDataControllerProvider = 
+  StateNotifierProvider<MainPageDataController, MainPageData>(
+    (ref) => MainPageDataController());
+
+
+
 
 class MainScreen extends ConsumerWidget {
   MainScreen({super.key});
 
   late double _deviceHeight;
   late double _deviceWidth;
+  late MainPageDataController _mainPageDataController;
+  late MainPageData _mainPageData;
   late TextEditingController _searchController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _mainPageDataController = ref.watch(mainPageDataControllerProvider.notifier);
+    _mainPageData = ref.watch(mainPageDataControllerProvider);
     _searchController = TextEditingController();
     return _buildUI();
   }
@@ -158,20 +173,20 @@ class MainScreen extends ConsumerWidget {
   }
 
   Widget _movieListViewWidget() {
-    final List<Movie> movies = [];
+    final List<Movie> movies = _mainPageData.movies;
 
-    for (var i = 0; i < 20; i++) {
-      movies.add(Movie(
-        title: 'Movie $i',
-        rating: 7.5,
-        language: 'English',
-        isAdult: false,
-        releaseDate: '2024-01-01',
-        posterPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        backdropPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        overview: 'This is a movie overview',
-      ));
-    }
+    // for (var i = 0; i < 20; i++) {
+    //   movies.add(Movie(
+    //     title: 'Movie $i',
+    //     rating: 7.5,
+    //     language: 'English',
+    //     isAdult: false,
+    //     releaseDate: '2024-01-01',
+    //     posterPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //     backdropPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //     overview: 'This is a movie overview',
+    //   ));
+    // }
 
     if (movies.isNotEmpty) {
       return ListView.builder(

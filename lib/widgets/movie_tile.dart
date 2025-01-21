@@ -21,7 +21,7 @@ class MovieTile extends StatelessWidget {
     return Container(
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _moviePosterWidget(),
@@ -37,7 +37,7 @@ class MovieTile extends StatelessWidget {
       width: width * 0.35,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(movie.posterPath ?? ''),
+          image: NetworkImage(movie.posterUrl()),
         ),
       ),
     );
@@ -91,6 +91,7 @@ class MovieTile extends StatelessWidget {
               movie.overview ?? '',
               style: TextStyle(
                 fontSize: 12,
+                overflow: TextOverflow.ellipsis,
                 color: Colors.white,
               ),
             ),

@@ -18,7 +18,11 @@ Future<void> main() async {
       child: SplashScreen(
         key: UniqueKey(), 
         onInitializationComplete: () {
-          runApp(const MyApp());
+          runApp(
+            ProviderScope(
+              child: const MyApp(),
+            ),
+          );
         },
       ),
     ),
