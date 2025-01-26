@@ -35,6 +35,7 @@ class MainScreen extends ConsumerWidget {
     _mainPageDataController = ref.watch(mainPageDataControllerProvider.notifier);
     _mainPageData = ref.watch(mainPageDataControllerProvider);
     _searchController = TextEditingController();
+    _searchController.text = _mainPageData.searchText;
     return _buildUI();
   }
 
@@ -123,7 +124,7 @@ class MainScreen extends ConsumerWidget {
       child: TextField(
         controller: _searchController,
         style: TextStyle(color: Colors.white),
-        onSubmitted: (_input) {},
+        onSubmitted: (input) => _mainPageDataController.updateSearchText(input.toString()),
           decoration: InputDecoration(
           hintText: 'Search',
           hintStyle: TextStyle(color: Colors.white),
@@ -138,14 +139,16 @@ class MainScreen extends ConsumerWidget {
   Widget _categorySelectionWidget() {
     return DropdownButton(
       dropdownColor: Colors.black38,
-      value: SearchCategory.popular,
+      value: _mainPageData.searchCategory,
       icon: Icon(Icons.menu, color: Colors.white24,
       ),
       underline: Container(
         height: 1,
         color: Colors.white24,
       ),
-      onChanged: (_value) {},
+      onChanged: (value) => value.toString().isNotEmpty 
+        ? _mainPageDataController.updateSearchCategory(value.toString()) 
+        : null,
       items: [
         DropdownMenuItem(
           value: SearchCategory.popular,
@@ -175,21 +178,21 @@ class MainScreen extends ConsumerWidget {
   Widget _movieListViewWidget() {
     final List<Movie> movies = _mainPageData.movies;
 
-    // for (var i = 0; i < 20; i++) {
-    //   movies.add(Movie(
-    //     title: 'Movie $i',
-    //     rating: 7.5,
-    //     language: 'English',
-    //     isAdult: false,
-    //     releaseDate: '2024-01-01',
-    //     posterPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    //     backdropPath: 'https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    //     overview: 'This is a movie overview',
-    //   ));
-    // }
-
     if (movies.isNotEmpty) {
-      return ListView.builder(
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification is ScrollEndNotification) {
+            final before = scrollNotification.metrics.extentBefore;
+            final max = scrollNotification.metrics.maxScrollExtent;
+            if (before == max) {
+              _mainPageDataController.getMovies();
+              return true;
+            }
+            return false;
+          }
+          return true;
+        },
+        child: ListView.builder(
         
         itemBuilder: (context, index) {
           return Padding(
@@ -197,21 +200,22 @@ class MainScreen extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {},
               child: MovieTile(
-                height: _deviceHeight * 0.15,
+                height: _deviceHeight * 0.20,
                 width: _deviceWidth * 0.85,
                 movie: movies[index],
               ),
             ),
           );
         },
-        itemCount: movies.length,
+          itemCount: movies.length,
+        )
       );
     }else {
       return Center(
         child: CircularProgressIndicator(
           backgroundColor: Colors.white ,
-        ),
-      );
+          ),
+        );
     }
   }
 }

@@ -25,4 +25,31 @@ class MovieService {
       throw Exception('Failed to load popular movies');
     }
   }
+
+  Future<List<Movie>> getUpcomingMovies({int page = 1}) async {
+    Response response = await _http.get('/movie/upcoming', query: {
+      'page': page,
+    });
+    if (response.statusCode == 200) {
+      Map data = response.data;
+      List<Movie> movies = data['results'].map<Movie>((movieData) => Movie.fromJson(movieData)).toList();
+      return movies;
+    } else {
+      throw Exception('Failed to load upcoming movies');
+    }
+  }
+
+  Future<List<Movie>> getSearchMovies({String searchText= '', int page = 1}) async {
+    Response response = await _http.get('/search/movie', query: {
+      'query': searchText,
+      'page': page,
+    });
+    if (response.statusCode == 200) {
+      Map data = response.data;
+      List<Movie> movies = data['results'].map<Movie>((movieData) => Movie.fromJson(movieData)).toList();
+      return movies;
+    } else {
+      throw Exception('Failed to load search movies');
+    }
+  }
 }

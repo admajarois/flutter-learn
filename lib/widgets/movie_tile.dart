@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:fakeflix/models/movie.dart';
 
 class MovieTile extends StatelessWidget {
-
-  final GetIt _getIt = GetIt.instance;
 
   final double height;
   final double width;
   final Movie movie;
 
   MovieTile({
+    super.key,
     required this.height,
     required this.width,
     required this.movie,
@@ -18,16 +16,14 @@ class MovieTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _moviePosterWidget(),
-          _movieInfoWidget(),
-        ],
-      )
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _moviePosterWidget(),
+        _movieInfoWidget(),
+      ],
     );
   }
 
@@ -44,22 +40,22 @@ class MovieTile extends StatelessWidget {
   }
 
   Widget _movieInfoWidget() {
-    return Container(
+    return SizedBox(
       height: height,
-      width: width * 0.66,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
+      width: width * 0.65,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                width: width * 0.56,
+              Expanded(
                 child: Text(
                   movie.title ?? '', 
                   overflow: TextOverflow.ellipsis, 
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22, 
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
@@ -67,37 +63,41 @@ class MovieTile extends StatelessWidget {
                 ),
               ),
               Text(
-                movie.rating.toString(), 
-                style: TextStyle(fontSize: 22, 
+                movie.rating?.toStringAsFixed(1) ?? '', 
+                style: const TextStyle(
+                  fontSize: 22, 
                   fontWeight: FontWeight.w400, 
                   color: Colors.white,
                 )
               ),
             ],
           ),
-          Container(
+          Padding(
             padding: EdgeInsets.fromLTRB(0, height * 0.02, 0, 0),
             child: Text(
               '${movie.language?.toUpperCase() ?? ''} | R: ${movie.isAdult ?? false ? 'Yes' : 'No'} | ${movie.releaseDate ?? ''}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 color: Colors.white,
               ),
             ),
           ),
-          Container(
+          Padding(
             padding: EdgeInsets.fromLTRB(0, height * 0.07, 0, 0),
             child: Text(
               movie.overview ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 overflow: TextOverflow.ellipsis,
                 color: Colors.white,
               ),
+              maxLines: 5,
+              textAlign: TextAlign.justify,
             ),
           ) 
         ],
       ),
+    ),
     );
   }
 }
