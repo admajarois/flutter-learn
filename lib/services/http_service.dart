@@ -13,21 +13,22 @@ class HttpService {
   late String _apiKey;
   
   HttpService() {
+    
     _baseUrl = Config.baseUrl!;
     _apiKey = Config.apiKey!;
   }
 
-  Future<Response> get(String _path, {Map<String, dynamic>? query}) async {
+  Future<Response> get(String path, {Map<String, dynamic>? query}) async {
     try {
-      String _url = '$_baseUrl$_path';  
-      Map<String, dynamic> _query = {
+      String url = '$_baseUrl$path';  
+      Map<String, dynamic> query0 = {
         'api_key': _apiKey,
         'language': 'en-US',
       };
       if (query != null) {
-        _query.addAll(query);
+        query0.addAll(query);
       }
-      return await dio.get(_url, queryParameters: _query);
+      return await dio.get(url, queryParameters: query0);
     } on DioException catch (e) {
       throw Exception(e);
     }

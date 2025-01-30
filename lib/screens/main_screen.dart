@@ -11,6 +11,7 @@ import '../models/main_page_data.dart';
 
 import '../controllers/mian_page_data_controller.dart';
 
+import '../screens/detail_screen.dart';
 
 final mainPageDataControllerProvider = 
   StateNotifierProvider<MainPageDataController, MainPageData>(
@@ -72,7 +73,7 @@ class MainScreen extends ConsumerWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          color: Colors.black.withOpacity(0.2),
+          color: Colors.black26,
         ),
       ),
     );
@@ -117,7 +118,7 @@ class MainScreen extends ConsumerWidget {
   }
 
   Widget _searchWidget() {
-    final _border = InputBorder.none;
+    final border = InputBorder.none;
     return SizedBox(
       width: _deviceWidth * 0.50,
       height: _deviceHeight * 0.05,
@@ -128,8 +129,8 @@ class MainScreen extends ConsumerWidget {
           decoration: InputDecoration(
           hintText: 'Search',
           hintStyle: TextStyle(color: Colors.white),
-          focusedBorder: _border,
-          border: _border,
+          focusedBorder: border,
+          border: border,
           prefixIcon: Icon(Icons.search, color: Colors.white,),
         ),
       ),
@@ -198,7 +199,12 @@ class MainScreen extends ConsumerWidget {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: _deviceHeight * 0.01, horizontal: 0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DetailScreen(movieId: movies[index].id!)),
+                );
+              },
               child: MovieTile(
                 height: _deviceHeight * 0.20,
                 width: _deviceWidth * 0.85,

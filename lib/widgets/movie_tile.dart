@@ -7,7 +7,7 @@ class MovieTile extends StatelessWidget {
   final double width;
   final Movie movie;
 
-  MovieTile({
+  const MovieTile({
     super.key,
     required this.height,
     required this.width,
@@ -18,7 +18,7 @@ class MovieTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _moviePosterWidget(),

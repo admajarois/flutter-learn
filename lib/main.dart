@@ -7,12 +7,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'screens/splash_screen.dart';
 import 'screens/main_screen.dart';
 
+import 'package:logger/logger.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  final _logger = Logger();
+
   // Load config before app starts
-  Config.load();
-  
+  try {
+    Config.load();
+  } catch (e) {
+    _logger.e('Error loading config: $e');
+  }
+
   runApp(
     ProviderScope(
       child: SplashScreen(

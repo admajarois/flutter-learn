@@ -52,4 +52,13 @@ class MovieService {
       throw Exception('Failed to load search movies');
     }
   }
+
+  Future<Movie> getMovieDetail(int movieId) async {
+    Response response = await _http.get('/movie/$movieId');
+    if (response.statusCode == 200) {
+      return Movie.fromJson(response.data);
+    } else {
+      throw Exception('Failed to load movie detail');
+    }
+  }
 }

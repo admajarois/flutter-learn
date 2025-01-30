@@ -1,6 +1,4 @@
 import 'package:fakeflix/config/config.dart';
-import 'package:get_it/get_it.dart';
-
 
 class Movie {
   final String? title;
@@ -11,6 +9,8 @@ class Movie {
   final String? backdropPath;
   final String? releaseDate;
   final num? rating;
+  final int? id;
+  final List<int>? genres;
 
 
   Movie({
@@ -22,6 +22,8 @@ class Movie {
     this.backdropPath,
     this.releaseDate,
     this.rating,
+    this.id,
+    this.genres,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
@@ -34,10 +36,16 @@ class Movie {
       backdropPath: json['backdrop_path'],
       releaseDate: json['release_date'],
       rating: json['vote_average'],
+      id: json['id'],
+      genres: (json['genre_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
     );
   }
 
   String posterUrl() {
     return '${Config.imageUrl}$posterPath';
   }
+
+  // String backdropUrl() {
+  //   return '${Config.imageUrl}$backdropPath';
+  // }
 }
