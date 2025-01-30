@@ -41,6 +41,21 @@ class Movie {
     );
   }
 
+  factory Movie.initial() {
+    return Movie(
+      title: '',
+      language: '',
+      isAdult: false,
+      overview: '',
+      posterPath: '',
+      backdropPath: '',
+      releaseDate: '',
+      rating: 0,
+      id: 0,
+      genres: [],
+    );
+  }
+
   String posterUrl() {
     return '${Config.imageUrl}$posterPath';
   }
