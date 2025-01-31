@@ -9,7 +9,7 @@ import '../widgets/movie_tile.dart';
 import '../models/movie.dart';
 import '../models/main_page_data.dart';
 
-import '../controllers/mian_page_data_controller.dart';
+import '../controllers/main_page_data_controller.dart';
 
 import '../screens/detail_screen.dart';
 

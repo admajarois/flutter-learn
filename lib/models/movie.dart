@@ -57,10 +57,10 @@ class Movie {
   }
 
   String posterUrl() {
-    return '${Config.imageUrl}$posterPath';
+    return '${Config.imageUrl}w500$posterPath';
   }
 
-  // String backdropUrl() {
-  //   return '${Config.imageUrl}$backdropPath';
-  // }
+  String backdropUrl() {
+    return '${Config.imageUrl}w780$backdropPath';
+  }
 }

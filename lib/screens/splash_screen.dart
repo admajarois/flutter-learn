@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 // services
 import 'package:fakeflix/services/http_service.dart';
 import 'package:fakeflix/services/movie_service.dart';
-
+import 'package:fakeflix/services/credits_service.dart';
 class SplashScreen extends StatefulWidget {
 
   final VoidCallback onInitializationComplete;
@@ -40,6 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     getIt.registerSingleton<MovieService>(
       MovieService()
+    );
+
+    getIt.registerSingleton<CreditsService>(
+      CreditsService()
     );
   }
 

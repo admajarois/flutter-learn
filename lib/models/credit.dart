@@ -1,3 +1,5 @@
+import 'package:fakeflix/config/config.dart';
+
 class Credit {
   final int id;
   final String name;
@@ -15,5 +17,9 @@ class Credit {
       name: json['name'],
       profilePath: json['profile_path'],
     );
+  }
+
+  String profileUrl() {
+    return '${Config.imageUrl}w500$profilePath';
   }
 }
