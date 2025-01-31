@@ -14,7 +14,7 @@ class MovieService {
   }
 
   Future<List<Movie>> getPopularMovies({int page = 1}) async {
-    Response response = await _http.get('/movie/popular', query: {
+    Response response = await _http.get('/movie/popular', params: {
       'page': page,
     });
     if (response.statusCode == 200) {
@@ -27,7 +27,7 @@ class MovieService {
   }
 
   Future<List<Movie>> getUpcomingMovies({int page = 1}) async {
-    Response response = await _http.get('/movie/upcoming', query: {
+    Response response = await _http.get('/movie/upcoming', params: {
       'page': page,
     });
     if (response.statusCode == 200) {
@@ -40,7 +40,7 @@ class MovieService {
   }
 
   Future<List<Movie>> getSearchMovies({String searchText= '', int page = 1}) async {
-    Response response = await _http.get('/search/movie', query: {
+    Response response = await _http.get('/search/movie', params: {
       'query': searchText,
       'page': page,
     });

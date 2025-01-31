@@ -18,17 +18,17 @@ class HttpService {
     _apiKey = Config.apiKey!;
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? query}) async {
+  Future<Response> get(String path, {Map<String, dynamic>? params}) async {
     try {
       String url = '$_baseUrl$path';  
-      Map<String, dynamic> query0 = {
+      Map<String, dynamic> query = {
         'api_key': _apiKey,
         'language': 'en-US',
       };
-      if (query != null) {
-        query0.addAll(query);
+      if (params != null) {
+        query.addAll(params);
       }
-      return await dio.get(url, queryParameters: query0);
+      return await dio.get(url, queryParameters: query);
     } on DioException catch (e) {
       throw Exception(e);
     }

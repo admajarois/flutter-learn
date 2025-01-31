@@ -25,6 +25,7 @@ class DetailScreen extends ConsumerWidget {
   late DetailPageData _detailPageData;
   late DetailPageDataController _detailPageDataController;
   late Movie _movie;
+  late List<Credit> _credits;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,6 +36,7 @@ class DetailScreen extends ConsumerWidget {
     _detailPageDataController.getMovieDetail(movieId);
     _detailPageDataController.getMovieCredits(movieId);
     _movie = _detailPageData.movie;
+    _credits = _detailPageData.credits;
     return _buildUI(context, ref);
   }
 
@@ -177,15 +179,18 @@ class DetailScreen extends ConsumerWidget {
   }
   
   Widget _buildMovieCredits() {
-    final List<Credit> credits = _detailPageData.credits;
-    if (credits.isNotEmpty) {
+    if (_credits.isNotEmpty) {
       return SizedBox(
         height: _deviceHeight * 0.25,
-        width: _deviceWidth,
-        child: ListView.builder(
-          itemCount: credits.length,
+        width: _deviceWidth * 0.85,
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Number of columns
+            childAspectRatio: 1.0, // Aspect ratio of each item
+          ),
+          itemCount: _credits.length,
           itemBuilder: (context, index) {
-            return _buildCreditCard(credits[index]);
+            return _buildCreditCard(_credits[index]);
           },
         ),
       );

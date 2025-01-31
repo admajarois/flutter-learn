@@ -15,11 +15,12 @@ class Credit {
     return Credit(
       id: json['id'],
       name: json['name'],
-      profilePath: json['profile_path'],
+      profilePath: json['profile_path'] ?? '',
     );
   }
 
   String profileUrl() {
+    if (profilePath == '') return 'https://i.postimg.cc/9f3zRXHV/Cristiano-Ronaldo-ceremony-rename-airport-Santa-Cruz-Madeira-Portugal-March-29-2017.webp';
     return '${Config.imageUrl}w500$profilePath';
   }
 }

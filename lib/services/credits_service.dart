@@ -14,7 +14,7 @@ class CreditsService {
   }
 
   Future<List<Credit>> getMovieCredits(int movieId) async {
-    Response response = await _http.get('/movie/$movieId/credits', query: {
+    Response response = await _http.get('/movie/$movieId/credits', params: {
       'language': 'en-US',
     });
     if (response.statusCode == 200) {
