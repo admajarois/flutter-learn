@@ -3,6 +3,7 @@ import 'package:fakeflix/services/http_service.dart';
 import 'package:dio/dio.dart';
 
 import 'package:fakeflix/models/movie.dart';
+import 'package:fakeflix/models/credit.dart';
 
 class MovieService {
   final GetIt getIt = GetIt.instance;
@@ -54,11 +55,49 @@ class MovieService {
   }
 
   Future<Movie> getMovieDetail(int movieId) async {
-    Response response = await _http.get('/movie/$movieId');
-    if (response.statusCode == 200) {
-      return Movie.fromJson(response.data);
-    } else {
-      throw Exception('Failed to load movie detail');
+    try {
+      Response response = await _http.get('/movie/$movieId');
+      if (response.statusCode == 200) {
+        return Movie.fromJson(response.data);
+      } else {
+        return Movie.initial();
+      }
+    } catch (e) {
+      print('Error fetching movie detail: $e');
+      return Movie.initial();
+    }
+  }
+
+  Future<List<Credit>> getMovieCredits(int movieId) async {
+    try {
+      Response response = await _http.get('/movie/$movieId/credits');
+      if (response.statusCode == 200) {
+        return (response.data['cast'] as List)
+            .map<Credit>((creditData) => Credit.fromJson(creditData))
+            .toList();
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching movie credits: $e');
+      return [];
+    }
+  }
+
+  Future<List<Movie>> getSimilarMovies(int movieId) async {
+    try {
+      Response response = await _http.get('/movie/$movieId/similar');
+      if (response.statusCode == 200) {
+        return (response.data['results'] as List)
+
+          .map<Movie>((movieData) => Movie.fromJson(movieData))
+          .toList();
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching similar movies: $e');
+      return [];
     }
   }
 }

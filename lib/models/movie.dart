@@ -57,10 +57,16 @@ class Movie {
   }
 
   String posterUrl() {
+    if (posterPath?.isEmpty ?? true) {
+      return 'https://fakeimg.pl/500x500?text=No+image';
+    }
     return '${Config.imageUrl}w500$posterPath';
   }
 
   String backdropUrl() {
+    if (backdropPath?.isEmpty ?? true) {
+      return 'https://fakeimg.pl/780x439?text=No+image';
+    }
     return '${Config.imageUrl}w780$backdropPath';
   }
 }

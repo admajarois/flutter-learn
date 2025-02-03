@@ -32,10 +32,12 @@ class MovieTile extends StatelessWidget {
       height: height,
       width: width * 0.35,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
         image: DecorationImage(
           image: NetworkImage(movie.posterUrl()),
         ),
       ),
+
     );
   }
 

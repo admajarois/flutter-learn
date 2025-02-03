@@ -20,7 +20,9 @@ class Credit {
   }
 
   String profileUrl() {
-    if (profilePath == '') return 'https://i.postimg.cc/9f3zRXHV/Cristiano-Ronaldo-ceremony-rename-airport-Santa-Cruz-Madeira-Portugal-March-29-2017.webp';
+    if (profilePath.isEmpty) {
+      return 'https://fakeimg.pl/500x500?text=No+image';
+    }
     return '${Config.imageUrl}w500$profilePath';
   }
 }

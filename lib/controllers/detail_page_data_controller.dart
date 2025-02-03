@@ -27,6 +27,14 @@ class DetailPageDataController extends StateNotifier<DetailPageData> {
     }
   }
 
+  Future<void> getSimilarMovies(int movieId) async {  
+    try {
+      final similarMovies = await _movieService.getSimilarMovies(movieId);
+      state = state.copyWith(similarMovies: similarMovies);
+    } catch (e) {
+      _logger.e('Error getting similar movies: $e');
+    }
+  }
   Future<void> getMovieCredits(int movieId) async {
     try {
       final credits = await _creditsService.getMovieCredits(movieId);
