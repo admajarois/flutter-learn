@@ -22,6 +22,8 @@ class MovieDetailInfo extends StatefulWidget {
 class _MovieDetailInfoState extends State<MovieDetailInfo> {
 
   bool _isExpanded = false;
+  bool _isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
      return SizedBox(
@@ -64,17 +66,40 @@ class _MovieDetailInfoState extends State<MovieDetailInfo> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-              child: Container(
-                width: widget.deviceWidth * 0.85,
-                height: widget.deviceHeight * 0.05,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-
-                child: TextButton.icon(onPressed: () {}, label: Text('Watch Now'), icon: Icon(Icons.play_arrow, color: Colors.black,),),
-              ),
+              child: Row( 
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: widget.deviceWidth * 0.65,
+                    height: widget.deviceHeight * 0.05,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextButton.icon(onPressed: () {}, label: Text('Trailer'), icon: Icon(Icons.play_arrow, color: Colors.black,),),
+                  ),
+                  Container(
+                    width: widget.deviceWidth * 0.15,
+                    height: widget.deviceHeight * 0.05,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(onPressed: () {
+                      setState(() { 
+                        _isFavorite = !_isFavorite;
+                      });
+                    }, icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border, 
+                      color: _isFavorite ? Colors.red : Colors.black,
+                      size: 20,
+                      ),
+                    ),
+                  ),
+                ]
+              ) 
             ),
+
           Padding(
             padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: Column(
@@ -98,7 +123,6 @@ class _MovieDetailInfoState extends State<MovieDetailInfo> {
                     onPressed: () {
                       setState(() {
                         _isExpanded = !_isExpanded;
-
                       });
                     },
                     child: Text(
