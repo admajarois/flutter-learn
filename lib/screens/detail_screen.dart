@@ -30,6 +30,9 @@ class DetailScreen extends ConsumerWidget {
   late Movie movie;
   late List<Movie> similarMovies;
   late List<Credit> credits;
+  String trailer = '';
+
+
 
   bool _isNavigating = false;
 
@@ -58,7 +61,9 @@ class DetailScreen extends ConsumerWidget {
     await _detailPageDataController.getMovieDetail(movieId);
     await _detailPageDataController.getMovieCredits(movieId);
     await _detailPageDataController.getSimilarMovies(movieId);
+    await _detailPageDataController.getMovieTrailer(movieId);
   }
+
 
   Widget _buildUI(BuildContext context, WidgetRef ref) {
     final detailPageData = ref.watch(detailPageDataControllerProvider);
@@ -68,39 +73,39 @@ class DetailScreen extends ConsumerWidget {
     
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: _buildMovieBackdrop(context, movie),
-      body: SizedBox(
-        width: _deviceWidth,
-        height: _deviceHeight,
-        child: SingleChildScrollView(
-          child: Column( 
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              _buildMovieInfo(movie),
-              SizedBox(height: 16),
-              _buildMovieCredits(credits),
-              SizedBox(height: 16),
-              _buildSimilarMovies(similarMovies),
-              SizedBox(height: 20),
-            ],
-          ),
+      body: CustomScrollView(
+          slivers: [
+            _buildMovieBackdrop(context, movie),
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildMovieInfo(movie),
+                  SizedBox(height: 16),
+                  _buildMovieCredits(credits),
+                  SizedBox(height: 16),
+                  _buildSimilarMovies(similarMovies),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
     );
   }
 
   Widget _buildMovieInfo(Movie movie) {
-    return MovieDetailInfo(movie: movie, deviceWidth: _deviceWidth, deviceHeight: _deviceHeight);
+    return MovieDetailInfo(movie: movie, trailer: trailer, deviceWidth: _deviceWidth, deviceHeight: _deviceHeight);
   }
 
-  PreferredSize _buildMovieBackdrop(BuildContext context, Movie movie) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(_deviceHeight * 0.30),
-      child: SizedBox(
-        height: _deviceHeight * 0.30,
-        width: _deviceWidth,
-        child: Stack(
+  Widget _buildMovieBackdrop(BuildContext context, Movie movie) {
+    return SliverAppBar(
+      expandedHeight: _deviceHeight * 0.30,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Stack(
           children: [
             if (movie.backdropPath?.isNotEmpty ?? false)
               Container(
@@ -116,8 +121,6 @@ class DetailScreen extends ConsumerWidget {
                 color: Colors.black,
               ),
             Container(
-              height: _deviceHeight * 0.30,
-              width: _deviceWidth,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -129,28 +132,26 @@ class DetailScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.white24,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ],
         ),
       ),
+      leading: Container(
+        margin: EdgeInsets.all(8.0), // Add some margin for better spacing
+        decoration: BoxDecoration(
+          color: Colors.white24, // White transparent color
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+        ),
+        child: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.black,
     );
   }
   
@@ -243,7 +244,7 @@ class DetailScreen extends ConsumerWidget {
                     onTap: () {
                       if (!_isNavigating) {
                         _isNavigating = true;
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => DetailScreen(movieId: similarMovies[index].id!)),
                         ).then((_) {
@@ -254,11 +255,7 @@ class DetailScreen extends ConsumerWidget {
                     child:  _buildSimilarMovieCard(similarMovies[index]),
                   ),
                 );
-              },
-
-
-
-
+              }
             ),
           ),
         ],

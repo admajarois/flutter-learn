@@ -43,4 +43,14 @@ class DetailPageDataController extends StateNotifier<DetailPageData> {
       _logger.e('Error getting movie credits: $e');
     }
   }
+
+  Future<void> getMovieTrailer(int movieId) async {
+    try {
+      final trailer = await _movieService.getMovieTrailer(movieId);
+      final trailerUrl = 'https://www.youtube.com/watch?v=$trailer';
+      state = state.copyWith(trailer: trailerUrl);
+    } catch (e) {
+      _logger.e('Error getting movie trailer: $e');
+    }
+  }
 }

@@ -100,4 +100,18 @@ class MovieService {
       return [];
     }
   }
+
+  Future<String> getMovieTrailer(int movieId) async {
+    try {
+      Response response = await _http.get('/movie/$movieId/videos');
+      if (response.statusCode == 200) {
+        return (response.data['results'] as List).firstWhere((video) => video['type'] == 'Trailer')['key'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      print('Error fetching movie trailer: $e');
+      return '';
+    }
+  }
 }
