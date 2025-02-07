@@ -4,19 +4,18 @@ import '../screens/video_player_screen.dart';
 
 class MovieDetailInfo extends StatefulWidget {
   final Movie movie;
-  final String trailer;
-
   final double deviceWidth;
   final double deviceHeight;
+
 
 
   const MovieDetailInfo({
     Key? key, 
     required this.movie, 
-    required this.trailer,
     required this.deviceWidth, 
     required this.deviceHeight
     }) : super(key: key);
+
   
   @override
   State<MovieDetailInfo> createState() => _MovieDetailInfoState();
@@ -83,7 +82,7 @@ class _MovieDetailInfoState extends State<MovieDetailInfo> {
                     child: TextButton.icon(onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => VideoPlayerScreen(videoUrl: widget.trailer)),
+                        MaterialPageRoute(builder: (context) => VideoPlayerScreen(movieId: widget.movie.id!)),
                       );
                     }, label: Text('Trailer'), icon: Icon(Icons.play_arrow, color: Colors.black,),),
 

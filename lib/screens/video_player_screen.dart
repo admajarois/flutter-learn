@@ -1,30 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class VideoPlayerScreen extends StatefulWidget {
-  final String videoUrl;
+import 'package:fakeflix/controllers/video_page_data_controller.dart';
+import 'package:fakeflix/models/video_page_data.dart';
 
-  const VideoPlayerScreen({super.key, required this.videoUrl});
+final videoPlayerControllerProvider = StateNotifierProvider<VideoPageDataController, VideoPageData>(
+  (ref) => VideoPageDataController(),
+);
+
+class VideoPlayerScreen extends ConsumerStatefulWidget {
+  final int movieId;
+
+  const VideoPlayerScreen({super.key, required this.movieId});
 
   @override
-  State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
+  ConsumerState<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
 }
 
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+class _VideoPlayerScreenState extends ConsumerState<VideoPlayerScreen> {
   late YoutubePlayerController _controller;
-
+  late VideoPageDataController _videoPageDataController;
+  late String _videoUrl;
 
   @override
   void initState() {
     super.initState();
-    final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId ?? '',
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
+    _videoPageDataController = ref.read(videoPlayerControllerProvider.notifier);
+    _fetchMovieTrailer();
+  }
+
+
+  Future<void> _fetchMovieTrailer() async {
+    await _videoPageDataController.getMovieTrailer(widget.movieId);
+    final videoPageData = ref.watch(videoPlayerControllerProvider);
+    _videoUrl = videoPageData.trailer;
+    final videoId = YoutubePlayer.convertUrlToId(_videoUrl);
+
+    setState(() {
+      _controller = YoutubePlayerController(
+        initialVideoId: videoId ?? '',
+        flags: const YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,    
+        ),
+      );
+    });
   }
 
   @override

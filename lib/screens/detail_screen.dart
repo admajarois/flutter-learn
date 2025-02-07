@@ -30,11 +30,7 @@ class DetailScreen extends ConsumerWidget {
   late Movie movie;
   late List<Movie> similarMovies;
   late List<Credit> credits;
-  String trailer = '';
 
-
-
-  bool _isNavigating = false;
 
 
   @override
@@ -61,7 +57,6 @@ class DetailScreen extends ConsumerWidget {
     await _detailPageDataController.getMovieDetail(movieId);
     await _detailPageDataController.getMovieCredits(movieId);
     await _detailPageDataController.getSimilarMovies(movieId);
-    await _detailPageDataController.getMovieTrailer(movieId);
   }
 
 
@@ -97,7 +92,7 @@ class DetailScreen extends ConsumerWidget {
   }
 
   Widget _buildMovieInfo(Movie movie) {
-    return MovieDetailInfo(movie: movie, trailer: trailer, deviceWidth: _deviceWidth, deviceHeight: _deviceHeight);
+    return MovieDetailInfo(movie: movie, deviceWidth: _deviceWidth, deviceHeight: _deviceHeight);
   }
 
   Widget _buildMovieBackdrop(BuildContext context, Movie movie) {
@@ -242,17 +237,13 @@ class DetailScreen extends ConsumerWidget {
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: GestureDetector(
                     onTap: () {
-                      if (!_isNavigating) {
-                        _isNavigating = true;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => DetailScreen(movieId: similarMovies[index].id!)),
-                        ).then((_) {
-                          _isNavigating = false;
-                        });
-                      }
+                        );
                     },
                     child:  _buildSimilarMovieCard(similarMovies[index]),
+
                   ),
                 );
               }
@@ -285,5 +276,3 @@ class DetailScreen extends ConsumerWidget {
     );
   }
 }
-
-
